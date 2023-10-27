@@ -1,7 +1,7 @@
 import Head from "next/head";
 import CoinGeckoDataTable from "./coingeckodatatable";
 
-const TITLE = "iCS Discover's CoinGecko Market";
+const TITLE = "iCS Discover's Crypto Market Watch using CoinGecko API";
 
 export default function Home() {
   return (
