@@ -53,4 +53,4 @@ If you already have a Vercel account, just run <code>vercel --prod</code> from p
 
 ### Tutorial
 
-<a  href="http://www.youtube.com/watch?feature=player_embedded&v=8DKcwd8DWHg"  target="_blank"><img  src="http://img.youtube.com/vi/8DKcwd8DWHg/0.jpg"  alt="How to Create Simple Crypto Market Watch Web Application and Deploy it Vercel using CoinGecko API, CDN DataTable & Next JS" width="240"  height="180"  border="10"  /></a>
+<a  href="http://www.youtube.com/watch?feature=player_embedded&v=Eg7Ag8zkjN8"  target="_blank"><img  src="http://img.youtube.com/vi/Eg7Ag8zkjN8/0.jpg"  alt="How to Create Simple Crypto Market Watch Web Application and Deploy it Vercel using CoinGecko API, CDN DataTable & Next JS" width="240"  height="180"  border="10"  /></a>
