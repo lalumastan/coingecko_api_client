@@ -1,10 +1,14 @@
 import { promises as fs } from 'fs';
+import os from 'os';
+import path from 'path';
+
+const marketJsonFIle = os.tmpdir() + path.sep + 'markets.json';
 
 export default async function handler(req, res) {
-
+  
   let result = null;
   const PING = "ping";
-  const MARKETS = "coins/markets?vs_currency=usd&per_page=250&page=1";
+  const MARKETS = "coins/markets?vs_currency=usd&per_page=250&page=1";    
 
   let response = await callCoinGeckoApi(PING);
 
@@ -25,8 +29,12 @@ export default async function handler(req, res) {
       result = await getMarkets();
     }
     else if (response.status == 200) {
-      console.log("Loading from CoinGecko ...");
+      console.log("Loading from CoinGecko and saving to cache ...");
       result = JSON.stringify(await response.json());
+
+      fs.writeFile(marketJsonFIle, result, (err) => {
+        if (err) console.log('Error writing file:', err);
+      });
     }
     else {
       let error = await response.json();
@@ -62,7 +70,7 @@ async function callCoinGeckoApi(endpoint) {
 };
 
 async function getMarkets() {
-  const file = await fs.readFile('markets.json');
+  const file = await fs.readFile(marketJsonFIle);
 
   return file;
 }
