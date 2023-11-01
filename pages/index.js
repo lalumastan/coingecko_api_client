@@ -5,7 +5,7 @@ const TITLE = "iCS Discover's Crypto Market Watch using CoinGecko API";
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Head className="site-navbar" role="banner">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
         <title>{TITLE}</title>
@@ -47,6 +47,6 @@ export default function Home() {
           </p>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
