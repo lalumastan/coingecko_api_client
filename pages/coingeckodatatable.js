@@ -68,47 +68,49 @@ export default function CoinGeckoDataTable(pageProps) {
             <div className="row">
                 {error && <div className="alert alert-danger" role="alert">{error}</div>}
             </div>
-            <div className="row">
-                {isLoading && <div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div>}
-            </div>
-            <div className="row bg-success border border-success my-0 py-2 rounded-top">
-                <h3 className="text-center text-white">
-                    {title} <span className="fs-6">(Refresh in {counter} seconds)</span>
-                </h3>
-            </div>
-            <div>
-                {!isLoading && data && data.length > 0 &&
-                    <div className="row bg-light border border-success rounded-bottom p-2">
-                        <table id="coingecko_table" className="display table table-striped table-bordered table-warning nowrap">
-                            <thead>
-                                <tr>
-                                    {HEADERS.map((head, headID) =>
-                                        <th key={headID} >{head}</th>)}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((rowContent, rowID) =>
-                                    rowContent && rowContent.length > 0 &&
-                                    <tr key={rowID}>
-                                        {rowContent.map((val, rowID) =>
-                                            <td key={rowID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
-                                                {JSON.stringify(val).indexOf("https://") != -1 && <img src={val} align="center" className="center" />}
-                                                {JSON.stringify(val).indexOf("https://") == -1 && val}
-                                            </td>
-                                        )}
-                                    </tr>
-                                )}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    {HEADERS.map((head, headID) =>
-                                        <th key={headID} >{head}</th>)}
-                                </tr>
-                            </tfoot>
-                        </table>
+            {isLoading && <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>}
+            {!isLoading &&
+                <>
+                    <div className="row bg-success border border-success my-0 py-2 rounded-top">
+                        <h3 className="text-center text-white">
+                            {title} <span className="fs-6">(Refresh in {counter} seconds)</span>
+                        </h3>
                     </div>
-                }
-            </div>
+                    <div>
+                        {data && data.length > 0 &&
+                            <div className="row bg-light border border-success rounded-bottom p-2">
+                                <table id="coingecko_table" className="display table table-striped table-bordered table-warning nowrap">
+                                    <thead>
+                                        <tr>
+                                            {HEADERS.map((head, headID) =>
+                                                <th key={headID} >{head}</th>)}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {data.map((rowContent, rowID) =>
+                                            rowContent && rowContent.length > 0 &&
+                                            <tr key={rowID}>
+                                                {rowContent.map((val, rowID) =>
+                                                    <td key={rowID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
+                                                        {JSON.stringify(val).indexOf("https://") != -1 && <img src={val} align="center" className="center" />}
+                                                        {JSON.stringify(val).indexOf("https://") == -1 && val}
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            {HEADERS.map((head, headID) =>
+                                                <th key={headID} >{head}</th>)}
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </>
+            }
         </div>
     );
 }
