@@ -4,12 +4,10 @@ import DataTable from 'datatables.net-bs5';
 const PULSE = 60;
 const HEADERS = ['Icon', 'Symbol', 'Name', 'Price ($)', 'High ($)', 'Low ($)', 'Day Chg %'];
 
-export default function CoinGeckoDataTable(pageProps) {
+export default function CoinGeckoDataTable() {
 
-    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
-    const [title, setTitle] = useState(pageProps.title);
     const [counter, setCounter] = useState(PULSE);
 
     useEffect(() => {
@@ -33,16 +31,12 @@ export default function CoinGeckoDataTable(pageProps) {
                 console.log(e);
                 setError(e);
             }
-            finally {
-                setLoading(false);
-            }
         };
 
         if (counter == 0)
             setCounter(PULSE);
 
         if (counter == PULSE) {
-            setLoading(true);
             fetchData();
 
             try {
@@ -64,53 +58,50 @@ export default function CoinGeckoDataTable(pageProps) {
     }, [counter]);
 
     return (
-        <div className="container my-3">
+        <>
             <div className="row">
                 {error && <div className="alert alert-danger" role="alert">{error}</div>}
             </div>
-            {isLoading && <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>}
-            {!isLoading &&
-                <>
-                    <div className="row bg-success border border-success my-0 py-2 rounded-top">
-                        <h3 className="text-center text-white">
-                            {title} <span className="fs-6">(Refresh in {counter} seconds)</span>
-                        </h3>
-                    </div>
-                    <div>
-                        {data && data.length > 0 &&
-                            <div className="row bg-light border border-success rounded-bottom p-2">
-                                <table id="coingecko_table" className="display table table-striped table-bordered table-warning nowrap">
-                                    <thead>
-                                        <tr>
-                                            {HEADERS.map((head, headID) =>
-                                                <th key={headID} >{head}</th>)}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {data.map((rowContent, rowID) =>
-                                            rowContent && rowContent.length > 0 &&
-                                            <tr key={rowID}>
-                                                {rowContent.map((val, rowID) =>
-                                                    <td key={rowID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
-                                                        {JSON.stringify(val).indexOf("https://") != -1 && <img src={val} align="center" className="center" />}
-                                                        {JSON.stringify(val).indexOf("https://") == -1 && val}
-                                                    </td>
-                                                )}
-                                            </tr>
+
+            {data && data.length > 0 && <>
+                <div className="row bg-success border border-success my-0 py-2 rounded-top">
+                    <h3 className="text-center text-white">
+                        {process.env.title} <span className="fs-6">(Refresh in {counter} seconds)</span>
+                    </h3>
+                </div>
+                <div>
+                    <div className="row bg-light border border-success rounded-bottom p-2">
+                        <table id="coingecko_table" className="display table table-striped table-bordered table-warning nowrap">
+                            <thead>
+                                <tr>
+                                    {HEADERS.map((head, headID) =>
+                                        <th key={headID} >{head}</th>)}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((rowContent, rowID) =>
+                                    rowContent && rowContent.length > 0 &&
+                                    <tr key={rowID}>
+                                        {rowContent.map((val, rowID) =>
+                                            <td key={rowID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
+                                                {JSON.stringify(val).indexOf("https://") != -1 && <img src={val} align="center" className="center" />}
+                                                {JSON.stringify(val).indexOf("https://") == -1 && val}
+                                            </td>
                                         )}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            {HEADERS.map((head, headID) =>
-                                                <th key={headID} >{head}</th>)}
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        }
+                                    </tr>
+                                )}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    {HEADERS.map((head, headID) =>
+                                        <th key={headID} >{head}</th>)}
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                </>
+                </div>
+            </>
             }
-        </div>
+        </>
     );
 }

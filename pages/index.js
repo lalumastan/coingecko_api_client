@@ -1,14 +1,16 @@
+import dynamic from 'next/dynamic';
 import Head from "next/head";
-import CoinGeckoDataTable from "./coingeckodatatable";
 
-const TITLE = "iCS Discover's Crypto Market Watch using CoinGecko API";
+const DynamicCoinGeckoDataTable = dynamic(() => import('./coingeckodatatable'), {
+  loading: () => <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>,
+})
 
 export default function Home() {
   return (
     <>
       <Head className="site-navbar" role="banner">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
-        <title>{TITLE}</title>
+        <title>{process.env.title}</title>
       </Head>
       <header>
         <nav className="navbar navbar-expand-lg navbar-dark justify-content-between sticky-top fs-4" role="navigation">
@@ -39,7 +41,9 @@ export default function Home() {
           </div>
         </nav>
       </header>
-      <CoinGeckoDataTable title={TITLE} />
+      <div className="container my-3">
+        <DynamicCoinGeckoDataTable />
+      </div>
       <footer>
         <div className="container text-white fw-bold">
           <p align="center">
