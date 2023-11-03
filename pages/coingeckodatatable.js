@@ -62,11 +62,11 @@ export default function CoinGeckoDataTable() {
         <main>
             <div className="container my-3">
                 {error && <div className="row"> <div className="alert alert-danger text-center" role="alert">{error.message}</div></div>}
-                {isLoading && <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>}
-                {!error && !isLoading && data && <>
+                {!error && !data && isLoading && <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>}
+                {!error && data && <>
                     <div className="row bg-success border border-success my-0 py-2 rounded-top">
                         <h3 className="text-center text-white">
-                            {process.env.title} <span className="fs-6">(Refresh in {counter} seconds)</span>
+                            {process.env.title} <span className="fs-6">({isLoading ? <span>Refreshing now ...</span> : <span>Refreshing in {counter} seconds</span>})</span>
                         </h3>
                     </div>
                     <div>
