@@ -2,7 +2,7 @@ import CoinGeckoDataTable from "./coingeckodatatable"
 
 export default function Home() {
   return (
-    <body>
+    <>
       <header>
         <nav className="navbar navbar-expand-lg navbar-dark justify-content-between sticky-top fs-4" role="navigation">
           <div className="container-fluid">
@@ -40,6 +40,6 @@ export default function Home() {
           </p>
         </div>
       </footer>
-    </body>
+    </>
   )
 }
