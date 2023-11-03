@@ -1,17 +1,8 @@
-import dynamic from 'next/dynamic';
-import Head from "next/head";
-
-const DynamicCoinGeckoDataTable = dynamic(() => import('./coingeckodatatable'), {
-  loading: () => <div className="row"><div className="alert alert-warning text-center border border-warning fw-bold" role="alert">Loading.  Please Wait ...</div></div>,
-})
+import CoinGeckoDataTable from "./coingeckodatatable"
 
 export default function Home() {
   return (
     <>
-      <Head className="site-navbar" role="banner">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
-        <title>{process.env.title}</title>
-      </Head>
       <header>
         <nav className="navbar navbar-expand-lg navbar-dark justify-content-between sticky-top fs-4" role="navigation">
           <div className="container-fluid">
@@ -41,16 +32,14 @@ export default function Home() {
           </div>
         </nav>
       </header>
-      <div className="container my-3">
-        <DynamicCoinGeckoDataTable />
-      </div>
+      <CoinGeckoDataTable />
       <footer>
         <div className="container text-white fw-bold">
           <p align="center">
-            &copy; 2023 by ICS Discover
+            &copy 2023 by ICS Discover
           </p>
         </div>
       </footer>
     </>
-  );
+  )
 }
