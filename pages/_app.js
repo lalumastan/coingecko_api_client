@@ -1,3 +1,5 @@
+import { GoogleAdSense } from "nextjs-google-adsense";
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
@@ -18,8 +20,10 @@ export default function App({ Component, pageProps }) {
   return <>
           <Head className="site-navbar" role="banner">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
+            <meta name="google-adsense-account" content="ca-pub-1521514346848136"></meta>
             <title>{process.env.title}</title>
           </Head>
+          <GoogleAdSense publisherId="ca-pub-1521514346848136" />
           <Component {...pageProps} />
         </>
 }
