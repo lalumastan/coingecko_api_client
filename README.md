@@ -46,7 +46,7 @@ If you already have a Vercel account, just run <code>vercel --prod</code> from p
 <li><a  href="https://nextjs.org/docs">Next.js Documentation</a></li>
 <li><a  href="https://reactjs.org/">React</a></li>
 <li><a  href="https://vercel.com">Vercel</a></li>
-<li><a  href="https://www.coingecko.com/api/documentation">CoinGecko API Documentation</a></li>
+<li><a  href="https://www.coingecko.com/en/api">CoinGecko API (Use referral code CGICSDISCOVER):</a></li>
 </ul>
 
   
