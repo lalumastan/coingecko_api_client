@@ -40,7 +40,7 @@ If you already have a Vercel account, just run <code>vercel --prod</code> from p
 
 ### References
 <ul>
-<li><a  href="https://aiweb-plum.vercel.app/">Advanced AI Web Application Demo</a></li>
+<li><a  href="https://icsdiscover.great-site.net/?site=aw">Advanced AI Web Application Demo</a></li>
 <li><a  href="https://coingecko-api-client.vercel.app">Live Demo</a></li>
 <li><a  href="https://nextjs.org/learn">Interactive Next.js tutorial</a></li>
 <li><a  href="https://nextjs.org/docs">Next.js Documentation</a></li>
