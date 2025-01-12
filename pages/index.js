@@ -36,7 +36,7 @@ export default function Home() {
       <footer>
         <div className="container text-white fw-bold">
           <p align="center">
-            &copy 2023 by ICS Discover
+            &copy; 2023 by ICS Discover
           </p>
         </div>
       </footer>
