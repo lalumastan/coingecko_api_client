@@ -11,7 +11,7 @@
   "dependencies": {
     "bootstrap": "^5.3.3",
     "datatables.net-bs5": "^1.13.6",
-    "eslint": "8.33.0",
+    "eslint": "^8.57.0",
     "eslint-config-next": "^14.2",
     "next": "^14.2",
     "nextjs-google-adsense": "^1.0.0",
