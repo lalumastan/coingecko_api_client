@@ -5,6 +5,7 @@ import path from 'path'
 const marketJsonFIle = os.tmpdir() + path.sep + 'markets.json'
 
 export default async function handler(req, res) {
+  console.log("Nishaaj is testing.")
   
   let result = null  
   const PING = "ping"
