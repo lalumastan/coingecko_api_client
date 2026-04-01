@@ -1,5 +1,3 @@
-import Script from "next/script"
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import "../styles/globals.css"
@@ -20,11 +18,11 @@ export default function App({ Component, pageProps }) {
           </Head>
 
           {/* AdSense: use next/script with strategy="afterInteractive" to avoid data-nscript warning */}
-          <Script
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1521514346848136"
-            strategy="afterInteractive"
-            crossOrigin="anonymous"
-          />
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1521514346848136"
+              crossOrigin="anonymous"
+            />            
 
           <Component {...pageProps} />
         </>

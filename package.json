@@ -12,15 +12,18 @@
     "bootstrap": "^5.3.3",
     "datatables.net-bs5": "^1.13.6",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.1.0",
-    "next": "^15.1.0",
+    "eslint-config-next": "16.2.2",
+    "next": "16.2.2",
     "nextjs-google-adsense": "^1.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@types/node": "20.8.10",
-    "@types/react": "18.2.34",
+    "@types/react": "19.2.14",
     "typescript": "6.0.2"
+  },
+  "overrides": {
+    "@types/react": "19.2.14"
   }
 }
