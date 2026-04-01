@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react"
-import DataTable from 'datatables.net-bs5'
-import React from "react"
+import { useEffect, useState, useRef } from "react"
 
 const PULSE = 60
 const HEADERS = ['Icon', 'Symbol', 'Name', 'Price ($)', 'High ($)', 'Low ($)', 'Day Chg %']
@@ -11,24 +9,22 @@ export default function CoinGeckoDataTable() {
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
     const [isLoading, setLoading] = useState(true)
+    const tableRef = useRef(null)  // ref to track the DataTable instance
 
     useEffect(() => {
         const getMarkets = async () => {
             try {
                 const response = await fetch("/api/coingecko")
-
                 const result = await response.json()
                 let data = [[]]
                 Object.keys(result).forEach(function (i) {
                     data.push([result[i].image, result[i].symbol, result[i].name, result[i].current_price, result[i].high_24h, result[i].low_24h, result[i].price_change_percentage_24h])
                 })
-
                 setData(data)
             } catch (e) {
                 console.log(e)
                 setError(e)
-            }
-            finally {
+            } finally {
                 setLoading(false)
             }
         }
@@ -39,24 +35,39 @@ export default function CoinGeckoDataTable() {
         if (counter == PULSE) {
             setLoading(true)
             getMarkets()
-
-            try {
-                setTimeout(() => {
-                    try {
-                        let table = new DataTable('#coingecko_table')
-                        if (table) {
-                            table.order([1, 'asc']).draw()
-                        }
-                    }
-                    catch (e) { console.log(e) }
-                }, 1000)
-            } catch (e) {
-                console.log(e)
-            }
         }
 
         counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
     }, [counter])
+
+    // Initialize or refresh DataTable whenever `data` changes
+    useEffect(() => {
+        if (!data) return
+
+        const initDataTable = async () => {
+            // Import jQuery and make it available on window so DataTables can find it
+            const $ = (await import('jquery')).default
+            window.$ = $
+            window.jQuery = $
+
+            // Import DataTables — this attaches itself to the jQuery on window
+            await import('datatables.net-bs5')
+
+            // Destroy existing instance before re-initializing (prevents "already initialized" error)
+            if (tableRef.current) {
+                tableRef.current.destroy()
+                tableRef.current = null
+            }
+
+            // Now window.$ has DataTables attached, so $.fn.DataTable is available
+            tableRef.current = window.$('#coingecko_table').DataTable({
+                order: [[1, 'asc']],
+                responsive: true,
+            })
+        }
+
+        initDataTable()
+    }, [data])
 
     return (
         <main>
@@ -75,15 +86,15 @@ export default function CoinGeckoDataTable() {
                                 <thead>
                                     <tr>
                                         {HEADERS.map((head, headID) =>
-                                            <th key={headID} >{head}</th>)}
+                                            <th key={headID}>{head}</th>)}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {data.map((rowContent, rowID) =>
                                         rowContent && rowContent.length > 0 &&
                                         <tr key={rowID}>
-                                            {rowContent.map((val, rowID) =>
-                                                <td key={rowID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
+                                            {rowContent.map((val, colID) =>
+                                                <td key={colID} width={JSON.stringify(val).indexOf("https://") != -1 ? "1%" : "14%"}>
                                                     {JSON.stringify(val).indexOf("https://") != -1 && <img src={val} align="center" className="center" />}
                                                     {JSON.stringify(val).indexOf("https://") == -1 && val}
                                                 </td>
@@ -94,7 +105,7 @@ export default function CoinGeckoDataTable() {
                                 <tfoot>
                                     <tr>
                                         {HEADERS.map((head, headID) =>
-                                            <th key={headID} >{head}</th>)}
+                                            <th key={headID}>{head}</th>)}
                                     </tr>
                                 </tfoot>
                             </table>

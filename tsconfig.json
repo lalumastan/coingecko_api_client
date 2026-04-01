@@ -12,16 +12,18 @@
     "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "pages/coingeckodatatable.js"  ],
+    "**/*.tsx",
+    "pages/coingeckodatatable.js"
+  ],
   "exclude": [
     "node_modules"
   ]
