@@ -1,28 +1,680 @@
-body {
-    background-image: url('/images/ai.jpg');
+/* ---------------------------------------------------------------------------
+   Design tokens
+   Deep navy-slate terminal base, not pure black - trading terminals (Bloomberg,
+   TradingView, Coinbase Pro) use dark-but-not-black surfaces because it's what
+   holds up over long sessions of staring at numbers. Gain/loss color-coding is
+   the one place this UI is allowed to shout; everything else stays quiet.
+--------------------------------------------------------------------------- */
+:root {
+  --bg-base: #0a111e;
+  --bg-panel: #101a2c;
+  --bg-panel-raised: #16223a;
+  --bg-row-hover: #182642;
+  --border: #22314d;
+  --border-soft: #1a2740;
 
-    /* Background image is centered vertically and horizontally at all times */
-    background-position: center center;
+  --text-primary: #e7ecf5;
+  --text-secondary: #a9b4c9;
+  --text-muted: #6e7a94;
 
-    /* Background image doesn't tile */
-    background-repeat: no-repeat;
+  --accent-gold: #e8b34c;
+  --accent-gold-soft: rgba(232, 179, 76, 0.14);
 
-    /* Background image is fixed in the viewport so that it doesn't move when
-the content's height is greater than the image's height */
-    background-attachment: fixed;
+  --gain: #34d399;
+  --gain-soft: rgba(52, 211, 153, 0.12);
+  --loss: #fb7185;
+  --loss-soft: rgba(251, 113, 133, 0.12);
 
-    /* This is what makes the background image rescale based
-on the container's size */
-    background-size: cover;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 
-    /* Set a background color that will be displayed
-while the background image is loading */
-    background-color: #033761;
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-image: url('/images/ai.jpg');
+
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
+
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+
+
+  /* This is what makes the background image rescale based on the container's size */
+  background-size: cover;
+
+  /* Set a background color that will be displayed while the background image is loading */
+  background-color: #033761;
+
+  /* Background image is fixed in the viewport so that it doesn't move when the content's height is greater than the image's height */
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent-gold-soft);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------- Layout ---------------------------------- */
+.page-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* -------------------------------- Navbar ---------------------------------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 17, 30, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+}
+
+.brand img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.brand-mark-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gain);
+  box-shadow: 0 0 0 3px var(--gain-soft);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+  flex: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: var(--bg-panel-raised);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle span::before {
+  position: absolute;
+  top: -6px;
+}
+
+.nav-toggle span::after {
+  position: absolute;
+  top: 6px;
+}
+
+@media (max-width: 760px) {
+  .nav-toggle {
+    display: inline-flex;
   }
+
+  .nav-links {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 10px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border-soft);
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 12px 14px;
+  }
+}
+
+/* -------------------------------- Footer ---------------------------------- */
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border-soft);
+  padding: 22px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* -------------------------------- Panel ------------------------------------ */
+.market-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+}
+
+.market-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.market-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.market-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* -------------------------- Live status / countdown ring ------------------- */
+.live-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.countdown-ring {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex: none;
+}
+
+.countdown-ring svg {
+  transform: rotate(-90deg);
+}
+
+.countdown-ring circle.track {
+  stroke: var(--border);
+}
+
+.countdown-ring circle.progress {
+  stroke: var(--accent-gold);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.countdown-ring.spinning circle.progress {
+  animation: spin-ring 0.9s linear infinite;
+  transition: none;
+}
+
+.live-status-text {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.live-status-text strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.refresh-btn {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.refresh-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-gold);
+}
+
+/* --------------------------------- Toolbar --------------------------------- */
+.market-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.search-field {
+  position: relative;
+  flex: 1 1 240px;
+  max-width: 320px;
+}
+
+.search-field input {
+  width: 100%;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  padding: 9px 12px 9px 32px;
+  border-radius: var(--radius-md);
+}
+
+.search-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-field input:focus {
+  border-color: var(--accent-gold);
+}
+
+.search-field .icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.page-size-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.page-size-select select {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------- Table ----------------------------------- */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.market-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.market-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-panel);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.market-table th button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.market-table th button:hover {
+  color: var(--text-secondary);
+}
+
+.sort-caret {
+  opacity: 0.55;
+  font-size: 9px;
+}
+
+.sort-caret.active {
+  opacity: 1;
+  color: var(--accent-gold);
+}
+
+.market-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.market-table tbody tr {
+  transition: background 0.12s ease;
+}
+
+.market-table tbody tr:hover {
+  background: var(--bg-row-hover);
+}
+
+.market-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.col-icon {
+  width: 1%;
+}
+
+.coin-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: block;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border-soft);
+}
+
+.coin-symbol {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.coin-name {
+  color: var(--text-muted);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.change-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.change-pill.gain {
+  color: var(--gain);
+  background: var(--gain-soft);
+}
+
+.change-pill.loss {
+  color: var(--loss);
+  background: var(--loss-soft);
+}
+
+.change-pill.flat {
+  color: var(--text-muted);
+  background: var(--bg-panel-raised);
+}
+
+/* --------------------------------- Skeleton ---------------------------------- */
+.skeleton-row td {
+  padding: 12px 16px;
+}
+
+.skeleton-bar {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--bg-panel-raised) 25%, var(--border-soft) 37%, var(--bg-panel-raised) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+/* --------------------------------- States ------------------------------------ */
+.state-panel {
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.state-panel h4 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin: 14px 0 6px;
+  color: var(--text-primary);
+}
+
+.state-panel p {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin: 0 auto;
+  max-width: 380px;
+}
+
+.state-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.state-icon.error {
+  background: var(--loss-soft);
+  color: var(--loss);
+}
+
+.state-icon.loading {
+  background: var(--accent-gold-soft);
+  color: var(--accent-gold);
+}
+
+/* -------------------------------- Pagination --------------------------------- */
+.pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 22px;
+}
+
+.pagination-summary {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  min-width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--accent-gold);
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.page-btn.active {
+  background: var(--accent-gold-soft);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* ---------------------------------- Motion ------------------------------------ */
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--gain-soft);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes spin-ring {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .brand-mark-dot,
+  .countdown-ring.spinning circle.progress,
+  .skeleton-bar {
+    animation: none !important;
+  }
+
+  .market-table tbody tr,
+  .refresh-btn,
+  .page-btn {
+    transition: none !important;
+  }
+}

@@ -1,45 +1,60 @@
+import { useState } from "react"
 import CoinGeckoDataTable from "./coingeckodatatable"
 
+const NAV_LINKS = [
+  { href: "https://www.youtube.com/channel/UCLZnGghxjldvhQSnno47Olw", label: "Tutorials" },
+  { href: "https://github.com/lalumastan", label: "Github" },
+  { href: "https://www.linkedin.com/in/mohammed-islam-57264235", label: "Linkedin" },
+  { href: "mailto:lalumastan@gmail.com", label: "Contact" },
+  { href: "https://www.youtube.com/@icsdiscover/about", label: "About" },
+]
+
 export default function Home() {
+  const [navOpen, setNavOpen] = useState(false)
+
   return (
-    <>
+    <div className="page-shell">
       <header>
-        <nav className="navbar navbar-expand-lg navbar-dark justify-content-between sticky-top fs-4" role="navigation">
-          <div className="container-fluid">
-            <a className="navbar-brand mx-2" href="#"><img src="/favicon.ico" alt="ICS Discover Logo" width="30%" className="border border-primary rounded" /></a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
+        <nav className="topbar" role="navigation" aria-label="Primary">
+          <div className="container topbar-inner">
+            <a className="brand" href="#">
+              <img src="/favicon.ico" alt="ICS Discover logo" />
+              <span className="brand-mark-dot" aria-hidden="true" />
+              iCS Discover
+            </a>
+            <button
+              className="nav-toggle"
+              type="button"
+              aria-expanded={navOpen}
+              aria-controls="primary-nav-links"
+              aria-label="Toggle navigation menu"
+              onClick={() => setNavOpen((open) => !open)}
+            >
+              <span />
             </button>
-            <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-              <ul className="navbar-nav ml-auto text-nowrap">
-                <li className="nav-item">
-                  <a className="nav-link" href="https://www.youtube.com/channel/UCLZnGghxjldvhQSnno47Olw" target="_new">Tutorials</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://github.com/lalumastan" target="_new">Github</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://www.linkedin.com/in/mohammed-islam-57264235" target="_new">Linkedin</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="mailto:lalumastan@gmail.com">Contact</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://www.youtube.com/@icsdiscover/about" target="_new">About</a>
-                </li>
-              </ul>
+            <div className={`nav-links${navOpen ? " open" : ""}`} id="primary-nav-links">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_new" : undefined}
+                  onClick={() => setNavOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
         </nav>
       </header>
+
       <CoinGeckoDataTable />
-      <footer>
-        <div className="container text-white fw-bold">
-          <p align="center">
-            &copy; 2023 by ICS Discover
-          </p>
+
+      <footer className="site-footer">
+        <div className="container">
+          &copy; 2026 by ICS Discover
         </div>
       </footer>
-    </>
+    </div>
   )
 }
