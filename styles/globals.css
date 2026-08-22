@@ -230,6 +230,53 @@ a {
   }
 }
 
+/* ---------- static content pages (about / privacy) ---------- */
+.doc-page {
+  padding: 48px 0 64px;
+}
+
+.doc-page h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.doc-page .doc-updated {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.doc-page h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 32px 0 10px;
+}
+
+.doc-page p,
+.doc-page li {
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.doc-page ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+
+.doc-page a.back-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: var(--accent-gold);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.doc-page a.back-link:hover {
+  text-decoration: underline;
+}
+
 /* -------------------------------- Ad slot ---------------------------------- */
 .ad-slot {
   margin: 20px 0;
@@ -262,6 +309,24 @@ a {
   color: var(--text-muted);
   font-size: 13px;
   text-align: center;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-inner a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-inner a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
 }
 
 /* -------------------------------- Panel ------------------------------------ */

@@ -7,7 +7,8 @@ const NAV_LINKS = [
   { href: "https://github.com/lalumastan", label: "Github" },
   { href: "https://www.linkedin.com/in/mohammed-islam-57264235", label: "Linkedin" },
   { href: "mailto:lalumastan@gmail.com", label: "Contact" },
-  { href: "https://www.youtube.com/@icsdiscover/about", label: "About" },
+  { href: "/about", label: "About" },
+  { href: "/privacy", label: "Privacy" },
 ]
 
 export default function Home() {
@@ -56,8 +57,9 @@ export default function Home() {
       <CoinGeckoDataTable />
 
       <footer className="site-footer">
-        <div className="container">
-          &copy; 2026 by ICS Discover
+        <div className="container footer-inner">
+          <span>&copy; 2026 by ICS Discover</span>
+          <a href="/privacy">Privacy Policy</a>
         </div>
       </footer>
     </div>
