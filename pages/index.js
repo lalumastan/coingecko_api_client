@@ -1,5 +1,6 @@
 import { useState } from "react"
 import CoinGeckoDataTable from "./coingeckodatatable"
+import AdUnit from "../components/AdUnit"
 
 const NAV_LINKS = [
   { href: "https://www.youtube.com/channel/UCLZnGghxjldvhQSnno47Olw", label: "Tutorials" },
@@ -47,6 +48,10 @@ export default function Home() {
           </div>
         </nav>
       </header>
+
+      <div className="container">
+        <AdUnit slot="9453353142" format="auto" fullWidthResponsive />
+      </div>
 
       <CoinGeckoDataTable />
 
